@@ -1,88 +1,17 @@
+.hiden{  display: none;}
+#registerUser{  margin-left: 35%; margin-top: 10%; float: left; width: 30%;  background: #f8f7f9;text-align: center;background-image:url(img/fondo2.png);padding: 5%;}
+#logo{   float: right; width: 80px;height: 70px;}
+#btnGoogle, #btnFacebook{ width: 30%; height: 5%; padding: 2%; margin: 1%; }
+#btnGoogle{ background:#E00415 ; color: #ffffff; border-color: #E00415  ;}
+#btnFacebook{ background:#3644A2; color: #ffffff; border-color:#3644A2; margin-bottom: 3%;}
+p { margin-bottom: 10%;}
+#btnLogin{ width: 25%; height: 90%; padding: 2%; margin: 1%; }
+#emaiLogin{width: 40%;}
+#Nombres, #Apellidos{ margin: 2%; width: 80%;  }
+#email,#password{ margin: 2%; width: 80%;  }
+/*#formulario{ border: solid 3px #000000; height: 900px;}*/
+#bd{ border-top: solid 10px #ffffff; float: right; width: 100%; height: 800px; background: #f8f7f9;text-align: center;    }
+.form-inline { width: 50%;}
+#navbar{border-bottom: solid 2px#ff4d94;}
 
-.hiden{
-    display: none;
-}
 
-#logout{
-
-float: right;
-margin-right: 35%;
-padding: 3%;
-margin-top: 3%;
-border: double 1px #000000;
-}
-
-#logo{
-    margin-top: 50%;
-}
-#imagen{
-   
-    width: 20%;
-    height: 900px;
-    float: left;
-}
-#btnGoogle, #btnFacebook{
-width: 90%;
-height: 90%;
-padding: 2%;
-margin: 1%;
-float: right;
-}
-
-#btnGoogle{
-    background:#E00415  ;
-    color: #ffffff;
-    border-color: #E00415  ;
-}
-
-#btnFacebook{
- background:#3644A2;
- color: #ffffff;
- border-color:#3644A2;
- margin-bottom: 3%;
-}
-#RegistroUser{
-   
-    margin-bottom: 10%;
-}
-
-#navbar{
-    width: 80%;
-    float: right;
-}
-#btnSignin{
-    width: 50%;
-    height: 90%;
-    padding: 2%;
-    margin: 1%;  
-   
-}
-#Nombres, #Apellidos{
-    margin: 2%;
-    width: 80%;
-  }
-#email,#password{
-    margin: 2%;
-    width: 80%;  
-}
-aside{ 
-    border-top: solid 10px #ffffff;
-    float: left;
-    width: 80%;
-    height: 900px;
-    background: #f8f7f9;
-    text-align: center;
-}
-
-#bd{
-    border-top: solid 10px #ffffff;
-    float: right;
-    width: 100%;
-    height: 800px;
-    background: #f8f7f9;
-    text-align: center;
-    }
-
-#sel{
-    border:2px dotted #d9d9d9;
-}    

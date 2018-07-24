@@ -1,52 +1,23 @@
-/*
-Validaciones:
-
-No pueden haber usuarios repetidos. (--)
-
-Comportamiento:
-La aplicación solo permitirá el acceso a usuarios con cuentas válidas.
-
-
-Comportamiento:
-
-Falta que se almacenen los likes en el database de firebase
-Poder eliminar un post específico.
-Al darle guardar debe cambiar de vuelta a un texto normal pero con la información editada.(ya
-esta pero aumentar un tiempo para que se vea el cambio)
-Al recargar la página debo de poder ver los textos editados
-
-
-Front end
-El corazón de este proyecto incluye:
-
-Separar la manipulación del DOM de la lógica (separación de responsabilidades).
-
-*/
-
-
-'use strict';
-
+//login de usuario existente
+const emaiLogin = document.getElementById('emaiLogin');
+const passwordLogin = document.getElementById('passwordLogin');
+const btnLogin = document.getElementById('btnLogin');
+//Cerrar Sesion
+const btnLogout = document.getElementById("btnLogout");
+//Post
+const bd = document.getElementById("bd");
+const post = document.getElementById("post");
+const btnSave = document.getElementById("btnSave");
+//Registro de usuario nuevo
+const registerUser = document.getElementById("registerUser");
 const btnGoogle = document.getElementById("btnGoogle");
 const btnFacebook = document.getElementById("btnFacebook");
-
 const email = document.getElementById("email");
 const password = document.getElementById("password");
-const btnSignin = document.getElementById("btnSignin");
-
-const btnLogout = document.getElementById("btnLogout");
-const btnRegistro = document.getElementById("btnRegistro");
-
-
-const bd = document.getElementById("bd");
-const btnSave = document.getElementById("btnSave");
-
-const posts = document.getElementById("posts");
-const logout = document.getElementById("logout");
+const btnUp = document.getElementById("btnUp");
 
 //const textarea = document.getElementById("textarea");
-const post = document.getElementById("post");
-
-
+expresionCorreo = /\w+@[a-z]+\.+[a-z]/;
 
 
 
@@ -54,10 +25,10 @@ const post = document.getElementById("post");
 window.onload = () => {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-            login.classList.remove("hiden");
+            registerUser.classList.add("hiden");
             bd.classList.remove("hiden");
             posts.classList.remove("hiden");
-            logout.classList.add("hiden");
+            login.classList.remove("hiden");
             console.log('Inicio logueado');
             console.log(user);
             username.innerHTML = `Bienvenida  ${user.displayName}`;
@@ -66,32 +37,38 @@ window.onload = () => {
             //https://graph.facebook.com/10209691428881959/picture
             //`${user.photoURL}`.appendChild(photoURL);
         } else {
-            console.log('No está logueado')
+            console.log('No está logueado');
+            registerUser.classList.remove("hiden");
             login.classList.add("hiden");
-            logout.classList.remove("hiden");
             posts.classList.add("hiden");
             bd.classList.add("hiden");
         }
     });
 }
-
-btnRegistro.addEventListener('click', () => {
-
-    // Registrar Usuario FIREBASE
-    firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
-        .then(function () {
-            console.log('Se creó el usuario')
-            var user = result.user;
+//Registrar Usuario
+btnUp.addEventListener('click', () => {
+    if ((expresionCorreo.test(email.value))) {
+        firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
+            .then(function () {
+                console.log('Se creó el usuario')
+                var user = result.user;
             //writeUserData recibe parametros 
             writeUserData(user.uid, user.displayName, user.email, user.photoURL);
-        })
-        .catch(function (error) {
-            console.log(error.code, error.message)
-        });
+            })
+            .catch(function (error) {
+                console.log(error.code, error.message)
+            });
+        if (email.value == '' || password.value == '') {
+            alert(' :( Por favor completa tu email y password para registrarte');
+        }
+    }
+    else {
+        alert('El correo electrónico no es valido');
+    }
 })
-
-btnSignin.addEventListener('click', () => {
-    firebase.auth().signInWithEmailAndPassword(email.value, password.value)
+//Login de Usuario
+btnLogin.addEventListener('click', () => {
+    firebase.auth().signInWithEmailAndPassword(emaiLogin.value, passwordLogin.value)
         .then(function () {
             console.log('Inicia Sesion')
             
@@ -99,19 +76,27 @@ btnSignin.addEventListener('click', () => {
         .catch(function (error) {
             console.log(error.code, error.message)
         });
-})
 
+    if (emaiLogin.value == '' || passwordLogin.value == '') {
+        alert(':( Por favor completa tu email y password para loguearte !!');
+    }
+
+    else if (!expresionCorreo.test(emaiLogin.value)) {
+        alert('El correo electrónico no es valido');
+    }
+})
+//Cerrar Sesión 
 btnLogout.addEventListener('click', () => {
     firebase.auth().signOut().then(function () {
         console.log('Cerró sesión');
         login.classList.remove("hiden");
-        logout.classList.add("hiden");
+        registerUser.classList.add("hiden");
     })
         .catch(function (error) {
             console.log('Error al cerrar sesión');
         })
 })
-
+//Login con Google
 btnGoogle.addEventListener('click', () => {
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({
@@ -124,16 +109,13 @@ btnGoogle.addEventListener('click', () => {
             //writeUserData recibe parametros 
             writeUserData(user.uid, user.displayName, user.email, user.photoURL);
         }).catch(function (error) {
-
             console.log(error.code);
             console.log(error.message);
             console.log(error.email);
             console.log(error.credential);
-
         });
-
 })
-
+//Login con Facebook
 btnFacebook.addEventListener('click', () => {
     var provider = new firebase.auth.FacebookAuthProvider();
     provider.setCustomParameters({
@@ -151,12 +133,9 @@ btnFacebook.addEventListener('click', () => {
             console.log(error.message);
             console.log(error.email);
             console.log(error.credential);
-
         });
-
 })
-
-
+//creacion de database 
 function writeUserData(userId, name, email, imageURL) {
     firebase.database().ref('users/' + userId).set({
         username: name,
@@ -164,8 +143,9 @@ function writeUserData(userId, name, email, imageURL) {
         profile_picture: imageURL,
     });
 }
-
+//creación de nuevo post
 function writeNewPost(uid, body) {
+
     var postData = {
         uid: uid,
         body: body,
@@ -174,14 +154,12 @@ function writeNewPost(uid, body) {
 
 
     var newPostKey = firebase.database().ref().child('posts').push().key;
-
-
+    // edita post
     var updates = {};
     //se almacenan posts
     updates['/posts/' + newPostKey] = postData;
     //se almacenan post por usuario
     updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-
     firebase.database().ref().update(updates);
     return newPostKey;
 
@@ -216,9 +194,7 @@ btnSave.addEventListener('click', () => {
     }
 })
 
-function reload_page() {
-    window.location.reload();
-}
+
 
 function addPost(newPost, post_value, userId, userNom) {
     console.log(newPost);
@@ -281,7 +257,6 @@ function addPost(newPost, post_value, userId, userNom) {
 
         /*
         EN MI DATABASE DE FIREBASE
-
         users: tiene h1XYr ... 
         es mi id -username claudia
         
@@ -372,4 +347,9 @@ function addPost(newPost, post_value, userId, userNom) {
     contPost.appendChild(btnLike);
     contPost.appendChild(cantLikes);
     posts.appendChild(contPost);
+}
+
+
+function reload_page() {
+    window.location.reload();
 }

@@ -1,104 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
-        crossorigin="anonymous">
-    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        var config = {
-            apiKey: "AIzaSyDlyPsTR7Jo4y0aSUIipN_NooO8HtqJexY",
-            authDomain: "fir-c6242.firebaseapp.com",
-            databaseURL: "https://fir-c6242.firebaseio.com",
-            projectId: "fir-c6242",
-            storageBucket: "fir-c6242.appspot.com",
-            messagingSenderId: "482129686898"
-        };
-        firebase.initializeApp(config);
-    </script>
-    <title>Firebase</title>
+        crossorigin="anonymous">  
+<script src="https://www.gstatic.com/firebasejs/5.3.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDlyPsTR7Jo4y0aSUIipN_NooO8HtqJexY",
+    authDomain: "fir-c6242.firebaseapp.com",
+    databaseURL: "https://fir-c6242.firebaseio.com",
+    projectId: "fir-c6242",
+    storageBucket: "fir-c6242.appspot.com",
+    messagingSenderId: "482129686898"
+  };
+  firebase.initializeApp(config);
+</script>
+ <title>Red Social</title>
 </head>
-
 <body>
-
+    <!-- Login de Usuarios Existente-->
     <nav id="navbar" class="navbar navbar-light bg-light">
+            <img id="logo" src="img/logoMeal.png">
         <a class="navbar-brand"></a>
         <form class="form-inline">
-            <input id="emaiLogeado" class="form-control mr-sm-2" type="search" placeholder="Correo Electrónico" aria-label="Search">
-            <input id="passwordLogin" class="form-control mr-sm-2" type="search" placeholder="Contraseña" aria-label="Search">
-            <button id="btnSignin" class="btn btn-outline-success my-2 my-sm-0" type="submit">Iniciar Sesión</button>
+            <input id="emaiLogin" class="form-control mr-sm-2" type="email" placeholder="Correo Electrónico" aria-label="Search">
+            <input id="passwordLogin" class="form-control mr-sm-2" type="password" placeholder="Contraseña" aria-label="Search">
+            <button id="btnLogin" type="button" class="btn btn-outline-success my-2 my-sm">Iniciar Sesión</button> 
         </form>
     </nav>
-
-    <div id="imagen">
-        <img id="logo" src=" logoMeal.PNG" class="img-thumbnail">
-    </div>
-
+    <div id="formulario">
+        <!-- Contenedor de Sesion Iniciada  / Cerrar Sesion-->    <!-- -->
     <div id="login" class="hiden">
         <p id="username"></p>
         <!--<img id="photoURL" alt="">-->
         <input id="btnLogout" type="button" value="Logout">
     </div>
-
-    <aside id="formulario">
-        <!--Base de datos-->
-        <div id="bd" class="hiden">
-            <label for="Publicar">Publicar</label>
-            <br>
-            <textarea name="Publicacion" id="post" cols="30" rows="10"></textarea>
-            <br>
-            <input type="button" value="Compartir" id="btnSave">
-            <select id="sel" name="Selecciona">
-                <option value="Público" selected>Público</option>
-                <option value="Amigos">Amigos</option>
-            </select>
-            <div id="posts" class="hiden">
-                <u>
-                    <h3>Publicaciones</h3>
-                </u>
-            </div>
-
-        </div>
-        <div id="logout">
-
-            <p>Si no tienes cuenta en
-                <img id="loguito" src=" logoMeal.PNG" width="50px" height="40px">
-            </p>
+           <!-- Registro de Usuario Nuevo -->
+     <form id="registerUser">
+             <p>Sing In with </p>
             <input id="btnGoogle" type="button" value="Google">
             <input id="btnFacebook" type="button" value="Facebook">
-            <p id="RegistroUser"> Registro de Usuario</p>
-
-            <!--
-            <input id="Nombres" class="form-control mr-sm-2" type="search" placeholder="Nombres ..." aria-label="Search">
-            <input id="Apellidos" class="form-control mr-sm-2" type="search" placeholder="Apellidos ..." aria-label="Search">
-
-            <div class="form-check form-check-inline">
-                <input id="inlineCheckbox1" class="form-check-input" type="checkbox" value="option1">
-                <label class="form-check-label" for="inlineCheckbox1">Hombre</label>
-            </div>
-
-            <div class="form-check form-check-inline">
-                <input id="inlineCheckbox2" class="form-check-input" type="checkbox" value="option2">
-                <label class="form-check-label" for="inlineCheckbox2">Mujer</label>
-            </div>
-
-            -->
-
-            <input id="email" type="email" placeholder=" Correo Electrónico...">
-            <br>
-            <input id="password" type="password" placeholder=" Contraseña...">
-
-            <input id="btnRegistro" type="button" value="Crear Cuenta">
-        </div>
-    </aside>
-
-
-
+            <p> or</p>
+           <input id="email" type="email" placeholder=" Correo Electrónico..." required>
+           <input id="password" type="password" placeholder=" Contraseña..."   required>
+           <input id="btnUp" type="button" value="Registrarme">
+     </form>
+ 
+            <!-- Contenedor de Post Base de datos-->
+      <div id="bd" class="hiden">
+                    <label for="Publicar">Publicar</label>
+                    <br>
+                    <textarea  id="post" name="Publicacion"  cols="30" rows="10"></textarea>
+                    <br>
+                    <input id="btnSave" type="button" value="Compartir">
+                    <select id="sel" name="Selecciona">
+                            <option value="Público" selected>Público</option> 
+                            <option value="Amigos">Amigos</option>
+                     </select>
+                     <div id="posts" class="hiden">
+                        <br>
+                         <u><h3>Publicaciones</h3></u>
+                     </div>
+      </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
