@@ -91,6 +91,9 @@ btnSignin.addEventListener('click', () => {
     firebase.auth().signInWithEmailAndPassword(email.value, password.value)
         .then(function () {
             console.log('Inicia Sesion')
+            var user = result.user;
+            //writeUserData recibe parametros 
+            writeUserData(user.uid, user.displayName, user.email, user.photoURL);
         })
         .catch(function (error) {
             console.log(error.code, error.message)
@@ -138,6 +141,10 @@ btnFacebook.addEventListener('click', () => {
     firebase.auth().signInWithPopup(provider)
         .then(function (result) {
             console.log('Sesión con Facebook')
+            var user = result.user;
+            //writeUserData recibe parametros 
+            writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+
         }).catch(function (error) {
             console.log(error.code);
             console.log(error.message);
