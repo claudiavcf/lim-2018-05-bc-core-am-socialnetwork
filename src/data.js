@@ -81,6 +81,9 @@ btnRegistro.addEventListener('click', () => {
     firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
         .then(function () {
             console.log('Se creó el usuario')
+            var user = result.user;
+            //writeUserData recibe parametros 
+            writeUserData(user.uid, user.displayName, user.email, user.photoURL);
         })
         .catch(function (error) {
             console.log(error.code, error.message)
@@ -91,9 +94,7 @@ btnSignin.addEventListener('click', () => {
     firebase.auth().signInWithEmailAndPassword(email.value, password.value)
         .then(function () {
             console.log('Inicia Sesion')
-            var user = result.user;
-            //writeUserData recibe parametros 
-            writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+            
         })
         .catch(function (error) {
             console.log(error.code, error.message)
