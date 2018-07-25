@@ -48,13 +48,23 @@ window.onload = () => {
 //Registrar Usuario
 btnUp.addEventListener('click', () => {
     if ((expresionCorreo.test(email.value))) {
+
         firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
-            .then(function (result) {
+            .then(function (result, currentUser) {
+
+                currentUser.sendEmailVerification();
+
+                firebase.auth().currentUser.sendEmailVerification();
+                console.log("Se envió correo")
+
+
                 console.log('Se creó el usuario')
                 var user = result.user;
                 //writeUserData recibe parametros 
                 writeUserData(user.uid, user.displayName, user.email, user.photoURL);
-               
+
+
+
             })
             .catch(function (error) {
                 console.log(error.code, error.message)
@@ -72,8 +82,8 @@ btnLogin.addEventListener('click', () => {
     firebase.auth().signInWithEmailAndPassword(emaiLogin.value, passwordLogin.value)
         .then(function () {
             console.log('Inicia Sesion')
-          
-            
+
+
         })
         .catch(function (error) {
             console.log(error.code, error.message)
@@ -152,7 +162,7 @@ function writeUserData(userId, name, email, imageURL) {
 function writeNewPost(uid, mensaje, like) {
 
 
- 
+
     var postData = {
         uid: uid,
         mensaje: mensaje,
@@ -189,11 +199,11 @@ btnSave.addEventListener('click', () => {
         var userNom = firebase.auth().currentUser.displayName;
 
         var cantLikes = firebase.auth().currentUser.cantLikes;
-        
+
 
         //newpost ...al crear post me genera un key en firebase, retorna y asigno al usuario
-       // const newPost = writeNewPost(userId, post.value, userNom);
-       const newPost = writeNewPost(userId, post.value,userNom, cantLikes);
+        // const newPost = writeNewPost(userId, post.value, userNom);
+        const newPost = writeNewPost(userId, post.value, userNom, cantLikes);
         //console.log(userNom);
 
         //imprimiendo en DOM
@@ -201,7 +211,7 @@ btnSave.addEventListener('click', () => {
         //logo.setAttribute("src", "http://subirimagen.me/uploads/20180717121119.jpg");
 
         //addPost(newPost, post.value, userId, userNom);
-        addPost(newPost, post.value, userId, userNom,cantLikes);
+        addPost(newPost, post.value, userId, userNom, cantLikes);
 
         post.value = " ";
 
@@ -211,7 +221,7 @@ btnSave.addEventListener('click', () => {
 
 
 //function addPost(newPost, post_value, userId, userNom) {
-    function addPost(newPost, post_value, userId,userNom ,cantLikes) {
+function addPost(newPost, post_value, userId, userNom, cantLikes) {
     console.log(newPost);
     console.log(post_value);
     console.log(userId);
@@ -233,7 +243,7 @@ btnSave.addEventListener('click', () => {
     cantLikes.setAttribute("for", "");
     cantLikes.setAttribute("type", "label");
 
-    var imagenLike=document.createElement("IMG"); 
+    var imagenLike = document.createElement("IMG");
     imagenLike.setAttribute("src", "http://subirimagen.me/uploads/20180724110439.png");
 
 
@@ -328,19 +338,15 @@ btnSave.addEventListener('click', () => {
     btnUpdate.addEventListener('onclick', () => {
 
         textPost.disabled = false;
-
         btnUpdate.setAttribute("value", "Guardar");
 
-      
-
-        const newPost = document.getElementById("newPost");
+        const newUpdate = document.getElementById(newPost);
 
         //alert("El post ha sido modificado correctamente");
 
         const nuevoPost = {
 
-            mensaje: newPost.value,
-            like: cantLikes.value,
+            mensaje: newUpdate.value,
         };
 
         var updatesUser = {};
