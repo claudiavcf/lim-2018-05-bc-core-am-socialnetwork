@@ -48,9 +48,23 @@ window.onload = () => {
 //Registrar Usuario
 btnUp.addEventListener('click', () => {
     if ((expresionCorreo.test(email.value))) {
+
         firebase.auth().createUserWithEmailAndPassword(email.value, password.value)
-            .then(function () {
+            .then(function (result, currentUser) {
+
+                currentUser.sendEmailVerification();
+
+                firebase.auth().currentUser.sendEmailVerification();
+                console.log("Se envió correo")
+
+
                 console.log('Se creó el usuario')
+                var user = result.user;
+                //writeUserData recibe parametros 
+                writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+
+
+
             })
             .catch(function (error) {
                 console.log(error.code, error.message)
@@ -120,6 +134,10 @@ btnFacebook.addEventListener('click', () => {
     firebase.auth().signInWithPopup(provider)
         .then(function (result) {
             console.log('Sesión con Facebook')
+            var user = result.user;
+            //writeUserData recibe parametros 
+            writeUserData(user.uid, user.displayName, user.email, user.photoURL);
+
         }).catch(function (error) {
             console.log(error.code);
             console.log(error.message);
@@ -136,11 +154,11 @@ function writeUserData(userId, name, email, imageURL) {
     });
 }
 //creación de nuevo post
-function writeNewPost(uid, body) {
+function writeNewPost(uid, mensaje) {
 
     var postData = {
         uid: uid,
-        body: body,
+        mensaje: mensaje,
     };
 
 
@@ -167,7 +185,7 @@ btnSave.addEventListener('click', () => {
 
         //userId va a capturar los usuarios logueados
         var userId = firebase.auth().currentUser.uid;
-        console.log(userId);
+        console.log(userId + "    Usuario logueado");
         //console.log(userId + "    Usuario logueado");
         var userNom = firebase.auth().currentUser.displayName;
 
@@ -189,10 +207,7 @@ btnSave.addEventListener('click', () => {
 
 
 function addPost(newPost, post_value, userId, userNom) {
-    console.log(newPost);
-    console.log(post_value);
-    console.log(userId);
-    console.log(userNom);
+   
     var nomUsuario = document.createElement("label");
     nomUsuario.setAttribute("for", "");
     nomUsuario.setAttribute("type", "label");
@@ -206,13 +221,13 @@ function addPost(newPost, post_value, userId, userNom) {
     btnDelete.setAttribute("value", "Eliminar");
     btnDelete.setAttribute("type", "button");
 
-    var btnLike = document.createElement("input");
-    btnLike.setAttribute("value", "Like");
-    btnLike.setAttribute("type", "button");
-
     var cantLikes = document.createElement("label");
     cantLikes.setAttribute("for", "");
     cantLikes.setAttribute("type", "label");
+
+    var imagenLike = document.createElement("IMG");
+    imagenLike.setAttribute("src", "http://subirimagen.me/uploads/20180724110439.png");
+
 
     var contPost = document.createElement('div');
     //var textPost = document.createElement('p');
@@ -228,7 +243,7 @@ function addPost(newPost, post_value, userId, userNom) {
 
     var contador = 0;
 
-    btnLike.addEventListener('click', () => {
+    imagenLike.addEventListener('click', () => {
 
         if (userId = 0) {
             console.log("Debe estar logueado");
@@ -274,11 +289,6 @@ function addPost(newPost, post_value, userId, userNom) {
 
             userPostsRef.on("child_added", snap => {
                 let userPost = snap.val();
-                /*let $li = document.createElement("li");
-                $li.innerHTML = user.name;
-                $li.setAttribute("child-key", snap.key); 
-                $li.addEventListener("click", userClicked)
-                userListUI.append($li);*/
                 console.log("USER POST:")
                 console.log(userPost);
 
@@ -301,7 +311,7 @@ function addPost(newPost, post_value, userId, userNom) {
     });
 
 
-    btnUpdate.addEventListener('onclick', () => {
+    btnUpdate.addEventListener('click', () => {
 
         textPost.disabled = false;
 
@@ -315,7 +325,7 @@ function addPost(newPost, post_value, userId, userNom) {
 
         const nuevoPost = {
 
-            body: newUpdate.value,
+            mensaje: newUpdate.value,
         };
 
         var updatesUser = {};
@@ -329,14 +339,14 @@ function addPost(newPost, post_value, userId, userNom) {
 
         firebase.database().ref().update(updatesUser);
         firebase.database().ref().update(updatesPost);
-    })
+    });
 
     //contPost.appendChild(logo);
     contPost.appendChild(nomUsuario);
     contPost.appendChild(textPost);
     contPost.appendChild(btnUpdate);
     contPost.appendChild(btnDelete);
-    contPost.appendChild(btnLike);
+    contPost.appendChild(imagenLike);
     contPost.appendChild(cantLikes);
     posts.appendChild(contPost);
 }
