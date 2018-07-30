@@ -20,6 +20,41 @@ const btnUp = document.getElementById("btnUp");
 expresionCorreo = /\w+@[a-z]+\.+[a-z]/;
 
 
+/*
+Validaciones:
+
+No pueden haber usuarios repetidos.
+La cuenta de usuario debe ser un correo electrónico válido.
+
+Comportamiento:
+La aplicación solo permitirá el acceso a usuarios con cuentas válidas.
+
+Muro/timeline de la red social
+Validaciones:
+
+Al apretar el botón de publicar, debe validar que exista contenido en el input.
+
+Comportamiento:
+
+Falta que se almacenen los likes en el database de firebase
+Poder eliminar un post específico.
+Pedir confirmación antes de eliminar un post.
+Al darle guardar debe cambiar de vuelta a un texto normal pero con la información editada.(ya
+esta pero aumentar un tiempo para que se vea el cambio)
+Al recargar la página debo de poder ver los textos editados
+
+Otras consideraciones
+La aplicación no debe dejar hacer publicaciones vacías de ningún tipo.
+Al editar contenido, el contenido editado se verá automáticamente e inmediatamente después de guardar.
+Al recargar la página se deben poder ver los contenidos editados.
+
+Front end
+El corazón de este proyecto incluye:
+
+Separar la manipulación del DOM de la lógica (separación de responsabilidades).
+
+*/
+
 
 
 window.onload = () => {
@@ -207,7 +242,7 @@ btnSave.addEventListener('click', () => {
 
 
 function addPost(newPost, post_value, userId, userNom) {
-   
+
     var nomUsuario = document.createElement("label");
     nomUsuario.setAttribute("for", "");
     nomUsuario.setAttribute("type", "label");
@@ -288,11 +323,18 @@ function addPost(newPost, post_value, userId, userNom) {
 
 
             userPostsRef.on("child_added", snap => {
+
+
                 let userPost = snap.val();
                 console.log("USER POST:")
                 console.log(userPost);
 
+                //let mens = Object.getOwnPropertyNames(userPost);
+                //console.log(mens);
+
                 //addPost(userPost, userPost.body, userPost.uid, userNom);
+
+                addPost(newPost, userPost , userId, userNom);
 
             });
 
@@ -317,7 +359,7 @@ function addPost(newPost, post_value, userId, userNom) {
 
         btnUpdate.setAttribute("value", "Guardar");
 
-      
+
 
         const newUpdate = document.getElementById(newPost);
 
@@ -330,7 +372,7 @@ function addPost(newPost, post_value, userId, userNom) {
 
         var updatesUser = {};
         var updatesPost = {};
-        
+
         updatesUser['/user-posts/' + userId + '/' + newPost] = nuevoPost;
         updatesPost['/posts/' + newPost] = nuevoPost;
 
