@@ -329,8 +329,8 @@ function addPost(newPost, post_value, userId, userNom) {
                 console.log("USER POST:")
                 console.log(userPost);
 
-                //let mens = Object.getOwnPropertyNames(userPost);
-                //console.log(mens);
+                let mens=JSON.stringify({userPost});
+                console.log(mens);
 
                 //addPost(userPost, userPost.body, userPost.uid, userNom);
 
