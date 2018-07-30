@@ -321,28 +321,40 @@ function addPost(newPost, post_value, userId, userNom) {
             const dbRef = firebase.database().ref();
             const userPostsRef = dbRef.child('user-posts');
 
-
-            userPostsRef.on("child_added", snap => {
-
-
-                let userPost = snap.val();
-                console.log("USER POST:")
-                console.log(userPost);
-
-                let mens=JSON.stringify({userPost});
-                console.log(mens);
-
-                //addPost(userPost, userPost.body, userPost.uid, userNom);
-
-                addPost(newPost, userPost , userId, userNom);
-
-            });
-
             //elimina todos los posts solo en js
             while (posts.firstChild)
                 posts.removeChild(posts.firstChild);
 
             alert('El usuario ha sido eliminado con éxito!');
+
+
+            userPostsRef.on("child_added", snap => {
+
+
+               let userPost = snap.val();
+                console.log("USER POST:")
+                console.log(userPost);
+
+                let mens = JSON.stringify(userPost);
+                console.log(mens);
+
+
+
+                snap.forEach(function (childSnapshot) {
+                    var childKey = childSnapshot.key;
+                    var childData = childSnapshot.val().mensaje;
+                    console.log("childData");
+                    console.log(childData);
+                    console.log("childKey");
+                    console.log(childKey);
+
+                    addPost(newPost, childData, userId, userNom);
+
+                });
+
+                //addPost(userPost, userPost.body, userPost.uid, userNom);
+
+            });
 
         }
         else {
